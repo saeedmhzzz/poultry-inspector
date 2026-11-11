@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#14532d">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<title>بازدیدیار طیور</title>
+<style>
+:root{--green:#166534;--bg:#f4f7f4;--card:#fff;--ink:#17251b;--muted:#65736a;--line:#dce5dd;--red:#b91c1c;--amber:#a16207}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,"Vazirmatn",sans-serif;line-height:1.8}
+header{background:linear-gradient(135deg,#14532d,#15803d);color:white;padding:22px 18px 18px;border-radius:0 0 22px 22px}
+header h1{margin:0;font-size:23px}header p{margin:4px 0 0;color:#e2f4e7;font-size:13px}
+main{max-width:760px;margin:auto;padding:14px 12px 90px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin:12px 0;box-shadow:0 2px 8px #102a1608}
+h2{font-size:17px;margin:0 0 10px}h3{font-size:15px;margin:14px 0 8px;color:var(--green)}
+label{display:block;font-size:13px;margin:8px 0 4px;color:#34483a}
+input,textarea,select{width:100%;border:1px solid #cbd8ce;border-radius:10px;padding:11px;font:inherit;background:#fff;color:var(--ink)}
+textarea{min-height:76px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.item{padding:10px 0;border-bottom:1px solid #edf1ed}.item:last-child{border:0}
+.item p{font-size:13px;margin:0 0 7px}
+.choices{display:flex;gap:7px;flex-wrap:wrap}
+.choices label{margin:0;display:flex;align-items:center;gap:5px;border:1px solid var(--line);border-radius:20px;padding:4px 9px;font-size:12px}
+.choices input{width:auto;margin:0;accent-color:var(--green)}
+button{border:0;border-radius:11px;padding:11px 14px;font:inherit;font-size:13px;cursor:pointer}
+.primary{background:var(--green);color:white}.secondary{background:#e7f0e8;color:#14532d}.danger{background:#fee2e2;color:#991b1b}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.actions button{flex:1}
+.small{font-size:12px;color:var(--muted)}
+.progress{height:8px;background:#e7eee8;border-radius:20px;overflow:hidden;margin:8px 0}.bar{height:100%;background:#16a34a;width:0}
+.visit{border:1px solid var(--line);padding:10px;border-radius:12px;margin:8px 0;display:flex;justify-content:space-between;gap:8px;align-items:center}
+.visit strong{font-size:13px}.hidden{display:none!important}
+nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);display:flex;justify-content:center;gap:6px;padding:8px 8px calc(8px + env(safe-area-inset-bottom));z-index:5}
+nav button{background:transparent;color:#526257;flex:1;padding:8px 3px;font-size:12px}nav button.active{background:#e8f2e9;color:var(--green);font-weight:bold}
+.notice{background:#fff7db;border:1px solid #f2df9b;border-radius:12px;padding:10px;font-size:12px}
+@media(min-width:600px){main{padding-top:20px}.grid{grid-template-columns:1fr 1fr}}
+@media print{header,nav,.no-print,.actions{display:none!important}body{background:white}.card{box-shadow:none;break-inside:avoid}main{padding:0}.item{break-inside:avoid}}
+</style>
+</head>
+<body>
+<header><h1>بازدیدیار طیور</h1><p>ثبت و مدیریت بازدیدهای بهداشتی مرغداری · نسخه آزمایشی آفلاین</p></header>
+<main>
+<section id="page-new">
+<div class="card">
+<h2>ثبت بازدید جدید · پیش از جوجه‌ریزی</h2>
+<div class="grid">
+<div><label>نام مرغداری *</label><input id="farm" placeholder="نام واحد"></div>
+<div><label>نام مالک / بهره‌بردار</label><input id="owner" placeholder="نام و نام خانوادگی"></div>
+<div><label>تاریخ بازدید (شمسی)</label><input id="date" type="text" inputmode="numeric" placeholder="۱۴۰۵/۰۸/۲۰" autocomplete="off"></div>
+<div><label>تعداد سالن</label><input id="houses" type="number" min="0" placeholder="مثلاً ۳"></div>
+<div><label>ظرفیت کل (قطعه)</label><input id="capacity" type="number" min="0" placeholder="ظرفیت"></div>
+<div><label>تاریخ تخلیه گله قبلی (شمسی)</label><input id="lastout" type="text" inputmode="numeric" placeholder="۱۴۰۵/۰۸/۲۰" autocomplete="off"></div>
+</div>
+<label>توضیحات اولیه</label><textarea id="intro" placeholder="اطلاعات تکمیلی مرغداری..."></textarea>
+</div>
+<div class="card">
+<h2>بخش اول: حصارکشی، محوطه و امنیت زیستی</h2>
+<div class="small">برای هر مورد یکی از سه وضعیت را انتخاب کن. موارد بررسی‌نشده در گزارش مشخص می‌مانند.</div>
+<div id="checklist"></div>
+<div class="progress"><div class="bar" id="bar"></div></div>
+<div class="small" id="progressText">۰ مورد از ۲۱ مورد ارزیابی شده</div>
+<label>نواقص و توضیحات بازدید</label><textarea id="notes" placeholder="محل دقیق نقص، شدت و اقدام اصلاحی موردنیاز..."></textarea>
+<label>نتیجه ارزیابی این بخش</label>
+<select id="decision"><option value="">هنوز تصمیم‌گیری نشده</option><option>قابل قبول از نظر این بخش</option><option>نیازمند رفع نقص و بازدید مجدد</option><option>دارای نقص جدی</option></select>
+<div class="notice" style="margin-top:12px">این ابزار، فرم کمکی شخصی است و جایگزین فرم و ضوابط رسمی شبکه دامپزشکی نیست. انتخاب «قابل قبول» در این بخش به‌تنهایی به معنی تأیید نهایی جوجه‌ریزی نیست.</div>
+<div class="actions no-print"><button class="primary" onclick="saveVisit()">ذخیره بازدید</button><button class="secondary" onclick="window.print()">چاپ / ذخیره PDF</button></div>
+</div>
+</section>
+<section id="page-history" class="hidden">
+<div class="card"><h2>سوابق بازدید</h2><div class="small">اطلاعات فقط در همین مرورگر و همین دستگاه ذخیره می‌شود.</div><div id="history"></div><div class="actions no-print"><button class="secondary" onclick="exportData()">خروجی پشتیبان اطلاعات (JSON)</button><button class="danger" onclick="clearAll()">حذف همه سوابق</button></div></div>
+</section>
+<section id="page-guide" class="hidden">
+<div class="card"><h2>راهنمای استفاده</h2>
+<ul><li>بازدید جدید را از صفحه «ثبت بازدید» شروع کن.</li><li>وضعیت هر مورد را انتخاب و نواقص را با جزئیات بنویس.</li><li>برای بایگانی کاغذی، گزینه چاپ / ذخیره PDF را بزن.</li><li>از سوابق، هر چند وقت یک‌بار خروجی پشتیبان بگیر.</li></ul>
+<div class="notice">برای نصب مثل اپلیکیشن روی صفحه اصلی اندروید، این پوشه باید روی یک نشانی HTTPS میزبانی شود؛ سپس از منوی مرورگر گزینه «افزودن به صفحه اصلی» را انتخاب کن. فایل HTML به‌تنهایی هم قابل باز شدن است، اما نصب PWA و ذخیره آفلاین پایدار به میزبانی HTTPS نیاز دارد.</div>
+</div>
+</section>
+</main>
+<nav class="no-print"><button class="active" onclick="showPage('new',this)">＋ بازدید جدید</button><button onclick="showPage('history',this)">▤ سوابق</button><button onclick="showPage('guide',this)">ⓘ راهنما</button></nav>
+<script>
+// تبدیل و نمایش تاریخ شمسی؛ تاریخ در پایگاه محلی به‌صورت میلادی استاندارد ذخیره می‌شود.
+const persianCalendar = new Intl.DateTimeFormat('en-US-u-ca-persian-nu-latn', {year:'numeric',month:'numeric',day:'numeric',timeZone:'UTC'});
+function persianParts(date){let p={};persianCalendar.formatToParts(date).forEach(x=>{if(x.type==='year'||x.type==='month'||x.type==='day')p[x.type]=Number(x.value)});return p}
+function jalaliYearStart(jy){for(let day=19;day<=22;day++){let d=new Date(Date.UTC(jy+621,2,day,12));let p=persianParts(d);if(p.year===jy&&p.month===1&&p.day===1)return d}return null}
+function normalizeDigits(s){return String(s).replace(/[۰-۹]/g,d=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(/[.\-]/g,'/')}
+function jalaliToISO(value){if(!value||!value.trim())return '';let m=normalizeDigits(value).trim().match(/^(\d{4})\/(\d{1,2})\/(\d{1,2})$/);if(!m)return null;let jy=+m[1],jm=+m[2],jd=+m[3];if(jm<1||jm>12||jd<1||jd>31)return null;let start=jalaliYearStart(jy);if(!start)return null;let offset=(jm<=6?(jm-1)*31:186+(jm-7)*30)+(jd-1);let d=new Date(start.getTime()+offset*86400000);let p=persianParts(d);if(p.year!==jy||p.month!==jm||p.day!==jd)return null;return d.toISOString().slice(0,10)}
+function formatJalali(iso){if(!iso)return '';let m=String(iso).match(/^(\d{4})-(\d{2})-(\d{2})/);if(!m)return iso;let d=new Date(Date.UTC(+m[1],+m[2]-1,+m[3],12));let p=persianParts(d);return String(p.year).padStart(4,'0')+'/'+String(p.month).padStart(2,'0')+'/'+String(p.day).padStart(2,'0')}
+const groups=[
+["حصارکشی و ورودی",["حصار پیرامونی کامل و سالم است.","ورودی و خروجی مرغداری مشخص و قابل کنترل است.","دروازه ورودی قابلیت بسته شدن دارد.","ورود افراد غیرمجاز کنترل می‌شود.","تابلو هشدار ورود افراد متفرقه نصب شده است."]],
+["کنترل تردد",["دفتر ثبت ورود و خروج افراد وجود دارد.","امکانات ضدعفونی خودروها فراهم و قابل استفاده است.","حوضچه ضدعفونی کفش در ورودی وجود دارد و محلول آن مناسب است.","محل تعویض لباس و کفش اختصاصی وجود دارد.","امکانات شست‌وشو و ضدعفونی دست فراهم است."]],
+["کنترل حیوانات و آفات",["منافذ ورود پرندگان با توری مناسب پوشیده شده‌اند.","نشانه‌ای از ورود پرندگان وحشی به سالن وجود ندارد.","آثار قابل توجهی از فعالیت جوندگان مشاهده نمی‌شود.","برنامه و تجهیزات ایمن کنترل جوندگان وجود دارد.","ورود حیوانات به محوطه تولید کنترل می‌شود."]],
+["وضعیت محوطه",["محوطه از زباله و ضایعات پاکسازی شده است.","علف‌های هرز و پوشش گیاهی انبوه کنترل شده‌اند.","آب‌ماندگی و تجمع فاضلاب وجود ندارد.","کود و ضایعات دوره قبلی تعیین تکلیف شده‌اند.","محل دفع بهداشتی تلفات مشخص و مطابق ضوابط است.","تجهیزات مستعمل و غیرضروری در محوطه انباشته نشده‌اند."]]
+];
+const labels=["مطلوب","نامطلوب","غیرقابل بررسی"];
+let answers={};
+const root=document.getElementById('checklist');
+groups.forEach((g,gi)=>{let h=document.createElement('h3');h.textContent=(gi+1)+'. '+g[0];root.appendChild(h);
+g[1].forEach((item,ii)=>{let idx=gi+'-'+ii,wrap=document.createElement('div');wrap.className='item';let p=document.createElement('p');p.textContent=item;wrap.appendChild(p);let ch=document.createElement('div');ch.className='choices';
+labels.forEach((lab,li)=>{let l=document.createElement('label'),r=document.createElement('input');r.type='radio';r.name='q'+idx;r.value=lab;r.onchange=()=>{answers[idx]=lab;updateProgress()};l.append(r,document.createTextNode(lab));ch.appendChild(l)});wrap.appendChild(ch);root.appendChild(wrap)})});
+function updateProgress(){let n=Object.keys(answers).length,total=groups.reduce((a,g)=>a+g[1].length,0);document.getElementById('bar').style.width=(n/total*100)+'%';document.getElementById('progressText').textContent=n+' مورد از '+total+' مورد ارزیابی شده'}
+function showPage(name,btn){['new','history','guide'].forEach(x=>document.getElementById('page-'+x).classList.toggle('hidden',x!==name));document.querySelectorAll('nav button').forEach(x=>x.classList.remove('active'));btn.classList.add('active');if(name==='history')renderHistory()}
+function val(id){return document.getElementById(id).value}
+function saveVisit(){if(!val('farm').trim()){alert('لطفاً نام مرغداری را وارد کن.');return}
+let dateISO=jalaliToISO(val('date')), lastoutISO=jalaliToISO(val('lastout'));
+if(val('date').trim() && !dateISO){alert('تاریخ بازدید را به شکل شمسی سال/ماه/روز وارد کن؛ مثال: ۱۴۰۵/۰۸/۲۰');return}
+if(val('lastout').trim() && !lastoutISO){alert('تاریخ تخلیه گله قبلی معتبر نیست؛ مثال: ۱۴۰۵/۰۸/۲۰');return}
+let v={id:Date.now(),farm:val('farm'),owner:val('owner'),date:dateISO,lastout:lastoutISO,houses:val('houses'),capacity:val('capacity'),intro:val('intro'),answers:{...answers},notes:val('notes'),decision:val('decision'),created:new Date().toISOString()};
+let a=JSON.parse(localStorage.getItem('visits')||'[]');a.unshift(v);localStorage.setItem('visits',JSON.stringify(a));alert('بازدید ذخیره شد.');}
+function renderHistory(){let a=JSON.parse(localStorage.getItem('visits')||'[]'),el=document.getElementById('history');el.innerHTML='';if(!a.length){el.textContent='هنوز بازدیدی ثبت نشده است.';return}a.forEach(v=>{let d=document.createElement('div');d.className='visit';let info=document.createElement('div'),b=document.createElement('strong'),s=document.createElement('div');b.textContent=v.farm;b.style.display='block';s.className='small';s.textContent=(v.date?formatJalali(v.date):'بدون تاریخ')+' · '+(v.decision||'بدون نتیجه');info.append(b,s);let btn=document.createElement('button');btn.className='secondary';btn.textContent='مشاهده / چاپ';btn.onclick=()=>printVisit(v.id);d.append(info,btn);el.appendChild(d)})}
+function printVisit(id){let a=JSON.parse(localStorage.getItem('visits')||'[]'),v=a.find(x=>x.id===id);if(!v)return;let lines=groups.map((g,gi)=>'<h3>'+g[0]+'</h3>'+g[1].map((q,ii)=>'<p>'+q+' — '+(v.answers[gi+'-'+ii]||'بررسی نشده')+'</p>').join('')).join('');let w=window.open('','_blank');w.document.write('<html lang="fa" dir="rtl"><meta charset="utf-8"><title>گزارش بازدید</title><style>body{font-family:Tahoma;padding:24px;line-height:2}h1,h3{color:#14532d}</style><h1>گزارش بازدید بهداشتی مرغداری</h1><p>مرغداری: '+esc(v.farm)+' | تاریخ: '+esc(v.date?formatJalali(v.date):'—')+'</p><p>مالک: '+esc(v.owner||'—')+' | سالن: '+esc(v.houses||'—')+' | ظرفیت: '+esc(v.capacity||'—')+'</p>'+lines+'<h3>توضیحات</h3><p>'+esc(v.notes||'—')+'</p><p>نتیجه: '+esc(v.decision||'—')+'</p><script>window.onload=()=>window.print()<\/script></html>');w.document.close()}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function exportData(){let blob=new Blob([JSON.stringify(JSON.parse(localStorage.getItem('visits')||'[]'),null,2)],{type:'application/json'}),u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download='poultry-inspector-backup.json';a.click();URL.revokeObjectURL(u)}
+function clearAll(){if(confirm('همه سوابق ذخیره‌شده حذف شوند؟ این کار برگشت‌پذیر نیست.')){localStorage.removeItem('visits');renderHistory()}}
+document.getElementById('date').value=formatJalali(new Date().toISOString().slice(0,10));
+if('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('./sw.js').catch(()=>{});
+</script>
+</body></html>
